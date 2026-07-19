@@ -4,12 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 )
 
 func main() {
+
+	r := gin.Default()
+
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
 
 	ctx := context.Background()
 
@@ -32,10 +40,13 @@ func main() {
     	shorted_url VARCHAR(100) NOT NULL UNIQUE
 	);
 	`
+
 	_, err = conn.Exec(ctx, CreateDatabase)
 	if err != nil {
-		log.Fatalf("Failed to create shorter table: %v\n", err)
+		log.Printf("Failed to create shorter table: %v\n", err)
+	} else {
+		fmt.Println("Schema initialized: 'shorter' table created successfully.")
 	}
-	fmt.Println("Schema initialized: 'shorter' table created successfully.")
 
+	r.Run()
 }
