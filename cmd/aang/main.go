@@ -34,10 +34,11 @@ func main() {
 	defer conn.Close(context.Background())
 
 	const CreateDatabase = `
-		CREATE TABLE shorters (
+		CREATE TABLE shorter (
 		shorterID INT PRIMARY KEY,
-    	original_url VARCHAR(150) NOT NULL,
-    	shorted_url VARCHAR(100) NOT NULL UNIQUE
+    	original_url TEXT NOT NULL,
+    	shorted_url VARCHAR(20) NOT NULL UNIQUE,
+		ttl TIMESTAMPTZ NOT NULL
 	);
 	`
 
@@ -49,4 +50,9 @@ func main() {
 	}
 
 	r.Run()
+}
+
+func shortURL() {
+
+	return
 }
